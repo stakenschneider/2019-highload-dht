@@ -14,7 +14,8 @@
 !*.lua
 !gradle-wrapper.jar
 !gradle-wrapper.properties
-
+!checkstyle.xml
+!.codeclimate.yml
 
 # ...even if they are in subdirectories
 !*/
