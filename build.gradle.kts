@@ -5,8 +5,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_12
+    targetCompatibility = JavaVersion.VERSION_12
 }
 
 repositories {
@@ -26,6 +26,10 @@ dependencies {
 
     // Guava primitives
     compile("com.google.guava:guava:27.0.1-jre")
+
+    // Rock DB
+    compile("org.rocksdb", "rocksdbjni", "6.2.2")
+
 
     // JUnit Jupiter test framework
     testCompile("org.junit.jupiter:junit-jupiter-api:5.4.0")
