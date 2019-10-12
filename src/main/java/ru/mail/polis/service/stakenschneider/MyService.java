@@ -38,9 +38,9 @@ public class MyService extends HttpServer implements Service {
             switch (request.getMethod()) {
                 case Request.METHOD_GET: {
                     try {
-                        ByteBuffer value = dao.get(key);
-                        ByteBuffer duplicate = value.duplicate();
-                        byte[] body = new byte[duplicate.remaining()];
+                        final ByteBuffer value = dao.get(key);
+                        final ByteBuffer duplicate = value.duplicate();
+                        final var body = new byte[duplicate.remaining()];
                         duplicate.get(body);
                         return new Response(Response.OK, body);
                     } catch (NoSuchElementLite ex) {
@@ -74,9 +74,9 @@ public class MyService extends HttpServer implements Service {
         if (port <= 1024 || 65536 <= port) {
             throw new IllegalArgumentException("invalid port");
         }
-        AcceptorConfig acceptor = new AcceptorConfig();
+        final AcceptorConfig acceptor = new AcceptorConfig();
         acceptor.port = port;
-        HttpServerConfig config = new HttpServerConfig();
+        final HttpServerConfig config = new HttpServerConfig();
         config.acceptors = new AcceptorConfig[]{acceptor};
         return config;
     }
