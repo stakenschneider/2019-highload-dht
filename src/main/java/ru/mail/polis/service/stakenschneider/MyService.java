@@ -1,6 +1,12 @@
 package ru.mail.polis.service.stakenschneider;
 
-import one.nio.http.*;
+import one.nio.http.HttpServer;
+import one.nio.http.Param;
+import one.nio.http.Path;
+import one.nio.http.Request;
+import one.nio.http.HttpServerConfig;
+import one.nio.http.HttpSession;
+import one.nio.http.Response;
 import one.nio.server.AcceptorConfig;
 import org.jetbrains.annotations.NotNull;
 import ru.mail.polis.dao.DAO;
@@ -20,6 +26,9 @@ public class MyService extends HttpServer implements Service {
         this.dao = dao;
     }
 
+    /**
+     * @return - response
+     */
     @Path("/v0/status")
     public Response status() {
         return Response.ok("OK");
