@@ -49,23 +49,25 @@ public class MyService extends HttpServer implements Service {
             @Param("id") final String id,
             @NotNull final Request request
     ) throws IOException {
-            if (id == null || id.isEmpty()) {
-                return new Response(Response.BAD_REQUEST, "Id must be not null".getBytes(StandardCharsets.UTF_8));
+        if (id == null || id.isEmpty()) {
+
+            return new Response(Response.BAD_REQUEST, "Id must be not null".getBytes(StandardCharsets.UTF_8));
+        }
+        final var key = ByteBuffer.wrap(id.getBytes(StandardCharsets.UTF_8));
+        switch (request.getMethod()) {
+            case Request.METHOD_GET: {
+                return get(key);
             }
-            final var key = ByteBuffer.wrap(id.getBytes(StandardCharsets.UTF_8));
-            switch (request.getMethod()) {
-                case Request.METHOD_GET: {
-                    return get(key);
-                }
-                case Request.METHOD_PUT: {
-                    return put(key, request);
-                }
-                case Request.METHOD_DELETE: {
-                    return delete(key);
-                }
-                default:
-                    return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
+            case Request.METHOD_PUT: {
+                return put(key, request);
             }
+            case Request.METHOD_DELETE: {
+                return delete(key);
+            }
+            default:
+                return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
+        }
+
     }
 
     @Override
