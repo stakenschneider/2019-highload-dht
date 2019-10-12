@@ -23,7 +23,7 @@ public final class RockDAO implements DAO {
 
     @NotNull
     @Override
-    public Iterator<Record> iterator(@NotNull ByteBuffer from) {
+    public Iterator<Record> iterator(@NotNull final ByteBuffer from) {
         final var iterator = db.newIterator();
         iterator.seek(ByteBuff.convertSub(from));
         return new RockRecIter(iterator);

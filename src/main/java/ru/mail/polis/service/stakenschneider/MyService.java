@@ -25,6 +25,11 @@ public class MyService extends HttpServer implements Service {
         return Response.ok("OK");
     }
 
+    /**
+     * @param request - requests: GET, PUT, DELETE
+     * @param id      - id element
+     * @return - response
+     */
     @Path("/v0/entity")
     public Response entity(
             @Param("id") final String id,
@@ -37,25 +42,16 @@ public class MyService extends HttpServer implements Service {
             final var key = ByteBuffer.wrap(id.getBytes(StandardCharsets.UTF_8));
             switch (request.getMethod()) {
                 case Request.METHOD_GET: {
-                    try {
-                        final ByteBuffer value = dao.get(key);
-                        final ByteBuffer duplicate = value.duplicate();
-                        final var body = new byte[duplicate.remaining()];
-                        duplicate.get(body);
-                        return new Response(Response.OK, body);
-                    } catch (NoSuchElementLite ex) {
-                        return new Response(Response.NOT_FOUND, Response.EMPTY);
-                    }
+                    return get(key);
                 }
 
                 case Request.METHOD_PUT: {
-                    dao.upsert(key, ByteBuffer.wrap(request.getBody()));
-                    return new Response(Response.CREATED, Response.EMPTY);
+                    return put(key, request);
                 }
                 case Request.METHOD_DELETE: {
-                    dao.remove(key);
-                    return new Response(Response.ACCEPTED, Response.EMPTY);
+                    return delete(key);
                 }
+
                 default:
                     return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
             }
@@ -79,5 +75,27 @@ public class MyService extends HttpServer implements Service {
         final HttpServerConfig config = new HttpServerConfig();
         config.acceptors = new AcceptorConfig[]{acceptor};
         return config;
+    }
+
+    private Response put(ByteBuffer key, Request request) throws IOException {
+        dao.upsert(key, ByteBuffer.wrap(request.getBody()));
+        return new Response(Response.CREATED, Response.EMPTY);
+    }
+
+    private Response delete(ByteBuffer key) throws IOException {
+        dao.remove(key);
+        return new Response(Response.ACCEPTED, Response.EMPTY);
+    }
+
+    private Response get(ByteBuffer key){
+        try {
+            final ByteBuffer value = dao.get(key);
+            final ByteBuffer duplicate = value.duplicate();
+            final var body = new byte[duplicate.remaining()];
+            duplicate.get(body);
+            return new Response(Response.OK, body);
+        } catch (NoSuchElementLite | IOException ex) {
+            return new Response(Response.NOT_FOUND, Response.EMPTY);
+        }
     }
 }
