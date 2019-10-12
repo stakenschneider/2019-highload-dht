@@ -54,20 +54,8 @@ public class MyService extends HttpServer implements Service {
             return new Response(Response.BAD_REQUEST, "Id must be not null".getBytes(StandardCharsets.UTF_8));
         }
         final var key = ByteBuffer.wrap(id.getBytes(StandardCharsets.UTF_8));
-        switch (request.getMethod()) {
-            case Request.METHOD_GET: {
-                return get(key);
-            }
-            case Request.METHOD_PUT: {
-                return put(key, request);
-            }
-            case Request.METHOD_DELETE: {
-                return delete(key);
-            }
-            default:
-                return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
-        }
 
+        return doAction(request, key);
     }
 
     @Override
@@ -106,6 +94,30 @@ public class MyService extends HttpServer implements Service {
             return new Response(Response.OK, body);
         } catch (NoSuchElementLite | IOException ex) {
             return new Response(Response.NOT_FOUND, Response.EMPTY);
+        }
+    }
+
+    private Response doAction(Request request, ByteBuffer key) throws IOException{
+        switch (request.getMethod()) {
+            case Request.METHOD_GET: {
+                try {
+                    final var value = dao.get(key).duplicate();
+                    return new Response(Response.OK, value.array());
+                } catch (NoSuchElementLite ex) {
+                    return new Response(Response.NOT_FOUND, Response.EMPTY);
+                }
+            }
+            case Request.METHOD_PUT: {
+                final var value = ByteBuffer.wrap(request.getBody());
+                dao.upsert(key, value);
+                return new Response(Response.CREATED, Response.EMPTY);
+            }
+            case Request.METHOD_DELETE: {
+                dao.remove(key);
+                return new Response(Response.ACCEPTED, Response.EMPTY);
+            }
+            default:
+                return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
         }
     }
 }
