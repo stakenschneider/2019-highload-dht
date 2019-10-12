@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import static java.lang.Byte.MIN_VALUE;
 
-abstract class ByteBuff {
+final class ByteBuff {
 
     private ByteBuff(){}
 

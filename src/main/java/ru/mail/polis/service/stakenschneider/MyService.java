@@ -21,7 +21,9 @@ public class MyService extends HttpServer implements Service {
     }
 
     @Path("/v0/status")
-    public Response status() { return Response.ok("OK");}
+    public Response status() {
+        return Response.ok("OK");
+    }
 
     @Path("/v0/entity")
     public Response entity(

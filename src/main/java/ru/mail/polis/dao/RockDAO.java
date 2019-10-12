@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.util.Iterator;
 
 
-final public class RockDAO implements DAO {
+public final class RockDAO implements DAO {
 
     private final RocksDB db;
 
@@ -31,7 +31,7 @@ final public class RockDAO implements DAO {
 
     @NotNull
     @Override
-    public ByteBuffer get(@NotNull ByteBuffer key) throws IOException {
+    public ByteBuffer get(@NotNull final ByteBuffer key) throws IOException {
         try {
             final var result = db.get(ByteBuff.convertSub(key));
             if (result == null) {
@@ -44,7 +44,7 @@ final public class RockDAO implements DAO {
     }
 
     @Override
-    public void upsert(@NotNull ByteBuffer key, @NotNull ByteBuffer value) throws IOException {
+    public void upsert(@NotNull final ByteBuffer key, @NotNull final ByteBuffer value) throws IOException {
         try {
             db.put(ByteBuff.convertSub(key), ByteBuff.array(value));
         } catch (RocksDBException exception) {
@@ -80,7 +80,7 @@ final public class RockDAO implements DAO {
         }
     }
 
-    static DAO create(File data) throws IOException {
+    static DAO create(final File data) throws IOException {
         RocksDB.loadLibrary();
         try {
             final var options = new Options()
