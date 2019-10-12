@@ -57,14 +57,12 @@ public class MyService extends HttpServer implements Service {
                 case Request.METHOD_GET: {
                     return get(key);
                 }
-
                 case Request.METHOD_PUT: {
                     return put(key, request);
                 }
                 case Request.METHOD_DELETE: {
                     return delete(key);
                 }
-
                 default:
                     return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
             }
