@@ -26,10 +26,10 @@ public class RockRecIter implements Iterator<Record>, AutoCloseable {
             throw new IllegalStateException("");
         }
 
-        final var key = iterator.key();
-        final var value = iterator.value();
+        final var key = ByteBuff.convertAdd(iterator.key());
+        final var record = Record.of(key, ByteBuffer.wrap(iterator.value()));
         iterator.next();
-        return Record.of(ByteBuffer.wrap(key), ByteBuffer.wrap(value));
+        return record;
     }
 
     @Override

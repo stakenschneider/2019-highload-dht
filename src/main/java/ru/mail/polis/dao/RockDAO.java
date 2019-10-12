@@ -1,14 +1,17 @@
 package ru.mail.polis.dao;
 
 import org.jetbrains.annotations.NotNull;
-import org.rocksdb.*;
-import org.rocksdb.util.BytewiseComparator;
+import org.rocksdb.BuiltinComparator;
+import org.rocksdb.Options;
+import org.rocksdb.RocksDB;
+import org.rocksdb.RocksDBException;
 import ru.mail.polis.Record;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
+
 
 public class RockDAO implements DAO {
 
@@ -22,7 +25,7 @@ public class RockDAO implements DAO {
     @Override
     public Iterator<Record> iterator(@NotNull ByteBuffer from) {
         final var iterator = db.newIterator();
-        iterator.seek(from.array());
+        iterator.seek(ByteBuff.convertSub(from));
         return new RockRecIter(iterator);
     }
 
@@ -30,31 +33,31 @@ public class RockDAO implements DAO {
     @Override
     public ByteBuffer get(@NotNull ByteBuffer key) throws IOException {
         try {
-            final var result = db.get(key.array());
+            final var result = db.get(ByteBuff.convertSub(key));
             if (result == null) {
                 throw new NoSuchElementLite("cant find element " + key.toString());
             }
             return ByteBuffer.wrap(result);
         } catch (RocksDBException exception) {
-            throw new IOException("", exception);
+            throw new IOException(exception);
         }
     }
 
     @Override
     public void upsert(@NotNull ByteBuffer key, @NotNull ByteBuffer value) throws IOException {
         try {
-            db.put(key.array(), value.array());
+            db.put(ByteBuff.convertSub(key), ByteBuff.array(value));
         } catch (RocksDBException exception) {
-            throw new IOException("", exception);
+            throw new IOException(exception);
         }
     }
 
     @Override
-    public void remove(@NotNull ByteBuffer key) throws IOException {
+    public void remove(@NotNull final ByteBuffer key) throws IOException {
         try {
-            db.delete(key.array());
+            db.delete(ByteBuff.convertSub(key));
         } catch (RocksDBException exception) {
-            throw new IOException("", exception);
+            throw new IOException(exception);
         }
     }
 
@@ -63,7 +66,7 @@ public class RockDAO implements DAO {
         try {
             db.compactRange();
         } catch (RocksDBException exception) {
-            throw new IOException("", exception);
+            throw new IOException(exception);
         }
     }
 
@@ -73,21 +76,20 @@ public class RockDAO implements DAO {
             db.syncWal();
             db.closeE();
         } catch (RocksDBException exception) {
-            throw new IOException("", exception);
+            throw new IOException(exception);
         }
     }
 
     static DAO create(File data) throws IOException {
         RocksDB.loadLibrary();
         try {
-            final var comparator = new BytewiseComparator(new ComparatorOptions());
             final var options = new Options()
                     .setCreateIfMissing(true)
-                    .setComparator(comparator);
+                    .setComparator(BuiltinComparator.BYTEWISE_COMPARATOR);
             final var db = RocksDB.open(options, data.getAbsolutePath());
             return new RockDAO(db);
         } catch (RocksDBException exception) {
-            throw new IOException("", exception);
+            throw new IOException(exception);
         }
     }
 }

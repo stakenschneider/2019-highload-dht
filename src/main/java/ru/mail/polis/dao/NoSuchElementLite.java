@@ -4,8 +4,12 @@ import java.util.NoSuchElementException;
 
 public class NoSuchElementLite extends NoSuchElementException {
 
-    NoSuchElementLite(String s) { super(s); }
+    NoSuchElementLite(String s) {
+        super(s);
+    }
 
     @Override
-    public synchronized Throwable fillInStackTrace() { return this; }
+    public Throwable fillInStackTrace() {
+            return this;
+    }
 }
