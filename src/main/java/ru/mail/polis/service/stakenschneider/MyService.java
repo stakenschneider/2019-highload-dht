@@ -97,24 +97,16 @@ public class MyService extends HttpServer implements Service {
         }
     }
 
-    private Response doAction(Request request, ByteBuffer key) throws IOException{
+    private Response doAction(final Request request, final ByteBuffer key) throws IOException{
         switch (request.getMethod()) {
             case Request.METHOD_GET: {
-                try {
-                    final var value = dao.get(key).duplicate();
-                    return new Response(Response.OK, value.array());
-                } catch (NoSuchElementLite ex) {
-                    return new Response(Response.NOT_FOUND, Response.EMPTY);
-                }
+                return get(key);
             }
             case Request.METHOD_PUT: {
-                final var value = ByteBuffer.wrap(request.getBody());
-                dao.upsert(key, value);
-                return new Response(Response.CREATED, Response.EMPTY);
+                return put(key, request);
             }
             case Request.METHOD_DELETE: {
-                dao.remove(key);
-                return new Response(Response.ACCEPTED, Response.EMPTY);
+                return delete(key);
             }
             default:
                 return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
