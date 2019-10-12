@@ -77,17 +77,17 @@ public class MyService extends HttpServer implements Service {
         return config;
     }
 
-    private Response put(ByteBuffer key, Request request) throws IOException {
+    private Response put(final ByteBuffer key, final Request request) throws IOException {
         dao.upsert(key, ByteBuffer.wrap(request.getBody()));
         return new Response(Response.CREATED, Response.EMPTY);
     }
 
-    private Response delete(ByteBuffer key) throws IOException {
+    private Response delete(final ByteBuffer key) throws IOException {
         dao.remove(key);
         return new Response(Response.ACCEPTED, Response.EMPTY);
     }
 
-    private Response get(ByteBuffer key){
+    private Response get(final ByteBuffer key){
         try {
             final ByteBuffer value = dao.get(key);
             final ByteBuffer duplicate = value.duplicate();
