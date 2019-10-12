@@ -27,6 +27,9 @@ public class MyService extends HttpServer implements Service {
     }
 
     /**
+     * Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+     * sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+     *
      * @return - response
      */
     @Path("/v0/status")
@@ -35,6 +38,8 @@ public class MyService extends HttpServer implements Service {
     }
 
     /**
+     * отань codeclimate.
+     *
      * @param request - requests: GET, PUT, DELETE
      * @param id      - id element
      * @return - response
@@ -43,8 +48,7 @@ public class MyService extends HttpServer implements Service {
     public Response entity(
             @Param("id") final String id,
             @NotNull final Request request
-    ) {
-        try {
+    ) throws IOException {
             if (id == null || id.isEmpty()) {
                 return new Response(Response.BAD_REQUEST, "Id must be not null".getBytes(StandardCharsets.UTF_8));
             }
@@ -64,9 +68,6 @@ public class MyService extends HttpServer implements Service {
                 default:
                     return new Response(Response.METHOD_NOT_ALLOWED, Response.EMPTY);
             }
-        } catch (Exception ex) {
-            return new Response(Response.INTERNAL_ERROR, Response.EMPTY);
-        }
     }
 
     @Override
