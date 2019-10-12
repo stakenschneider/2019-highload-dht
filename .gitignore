@@ -16,6 +16,9 @@
 !gradle-wrapper.properties
 !checkstyle.xml
 !.codeclimate.yml
+!Results.md
+!*.svg
+
 
 # ...even if they are in subdirectories
 !*/
