@@ -7,7 +7,9 @@ import java.util.Arrays;
 
 import static java.lang.Byte.MIN_VALUE;
 
-class ByteBuff {
+abstract class ByteBuff {
+
+    private ByteBuff(){}
 
     static byte[] array(@NotNull final ByteBuffer buffer) {
         final var copy = buffer.duplicate();

@@ -13,11 +13,11 @@ import java.nio.ByteBuffer;
 import java.util.Iterator;
 
 
-public class RockDAO implements DAO {
+final public class RockDAO implements DAO {
 
     private final RocksDB db;
 
-    private RockDAO(RocksDB db) {
+    private RockDAO(final RocksDB db) {
         this.db = db;
     }
 
