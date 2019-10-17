@@ -2,6 +2,7 @@ package ru.mail.polis.service.stakenschneider;
 
 import java.util.NoSuchElementException;
 
+@SuppressWarnings("serial")
 public class NoSuchElementLite extends NoSuchElementException {
 
     public NoSuchElementLite(final String s) {
