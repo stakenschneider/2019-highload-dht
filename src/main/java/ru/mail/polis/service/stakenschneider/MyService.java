@@ -10,7 +10,6 @@ import one.nio.http.Response;
 import one.nio.server.AcceptorConfig;
 import org.jetbrains.annotations.NotNull;
 import ru.mail.polis.dao.DAO;
-import ru.mail.polis.dao.NoSuchElementLite;
 import ru.mail.polis.service.Service;
 
 import java.io.IOException;
@@ -20,15 +19,13 @@ import java.nio.charset.StandardCharsets;
 public class MyService extends HttpServer implements Service {
     private final DAO dao;
 
-    public MyService(final int port,
-                     @NotNull final DAO dao) throws IOException {
+    public MyService(final int port, @NotNull final DAO dao) throws IOException {
         super(getConfig(port));
         this.dao = dao;
     }
 
     /**
-     * Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-     * sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+     * Life check.
      *
      * @return - response
      */
@@ -38,7 +35,7 @@ public class MyService extends HttpServer implements Service {
     }
 
     /**
-     * отань codeclimate.
+     * Access to DAO.
      *
      * @param request - requests: GET, PUT, DELETE
      * @param id      - id element

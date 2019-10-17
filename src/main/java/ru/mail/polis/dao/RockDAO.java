@@ -6,12 +6,12 @@ import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 import ru.mail.polis.Record;
+import ru.mail.polis.service.stakenschneider.NoSuchElementLite;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
-
 
 public final class RockDAO implements DAO {
 

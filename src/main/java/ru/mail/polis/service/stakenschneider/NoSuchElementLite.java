@@ -1,10 +1,10 @@
-package ru.mail.polis.dao;
+package ru.mail.polis.service.stakenschneider;
 
 import java.util.NoSuchElementException;
 
 public class NoSuchElementLite extends NoSuchElementException {
 
-    NoSuchElementLite(final String s) {
+    public NoSuchElementLite(final String s) {
         super(s);
     }
 
