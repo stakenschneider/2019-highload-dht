@@ -108,6 +108,7 @@ public class MyAsyncService extends HttpServer implements Service {
                     break;
                 default:
                     session.sendError(METHOD_NOT_ALLOWED, "Wrong method");
+                    break;
             }
         } catch (IOException e) {
             session.sendError(INTERNAL_ERROR, e.getMessage());
