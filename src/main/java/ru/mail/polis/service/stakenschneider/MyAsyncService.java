@@ -30,6 +30,7 @@ import static one.nio.http.Response.INTERNAL_ERROR;
 import static one.nio.http.Response.BAD_REQUEST;
 import static one.nio.http.Response.EMPTY;
 
+@SuppressWarnings("PMD.TooManyStaticImports")
 public class MyAsyncService extends HttpServer implements Service {
     @NotNull
     private final DAO dao;
