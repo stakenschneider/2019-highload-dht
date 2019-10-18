@@ -28,6 +28,7 @@ import static java.util.logging.Level.INFO;
 import static one.nio.http.Response.METHOD_NOT_ALLOWED;
 import static one.nio.http.Response.INTERNAL_ERROR;
 import static one.nio.http.Response.BAD_REQUEST;
+import static one.nio.http.Response.EMPTY;
 
 public class MyAsyncService extends HttpServer implements Service {
     @NotNull
@@ -86,7 +87,7 @@ public class MyAsyncService extends HttpServer implements Service {
         final String id = request.getParameter("id=");
         if (id == null || id.isEmpty()) {
             try {
-                session.sendResponse(new Response(Response.BAD_REQUEST, Response.EMPTY));
+                session.sendResponse(new Response(BAD_REQUEST, EMPTY));
             } catch (IOException e) {
                 logger.log(INFO, "something has gone terribly wrong", e);
             }
@@ -182,17 +183,17 @@ public class MyAsyncService extends HttpServer implements Service {
             duplicate.get(body);
             return new Response(Response.OK, body);
         } catch (NoSuchElementLite | IOException ex) {
-            return new Response(Response.NOT_FOUND, Response.EMPTY);
+            return new Response(Response.NOT_FOUND, EMPTY);
         }
     }
 
     private Response put(final ByteBuffer key, final Request request) throws IOException {
         dao.upsert(key, ByteBuffer.wrap(request.getBody()));
-        return new Response(Response.CREATED, Response.EMPTY);
+        return new Response(Response.CREATED, EMPTY);
     }
 
     private Response delete(final ByteBuffer key) throws IOException {
         dao.remove(key);
-        return new Response(Response.ACCEPTED, Response.EMPTY);
+        return new Response(Response.ACCEPTED, EMPTY);
     }
 }
