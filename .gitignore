@@ -16,7 +16,8 @@
 !gradle-wrapper.properties
 !checkstyle.xml
 !.codeclimate.yml
-!Results.md
+!wrk_results.md
+!wrk2_results.md
 !*.svg
 
 
