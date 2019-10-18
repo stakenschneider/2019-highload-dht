@@ -17,13 +17,14 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 
+import java.util.logging.Logger;
 import java.util.Iterator;
 import java.util.concurrent.Executor;
 
 import org.jetbrains.annotations.NotNull;
 
+import static java.util.logging.Level.INFO;
 import static one.nio.http.Response.METHOD_NOT_ALLOWED;
 import static one.nio.http.Response.INTERNAL_ERROR;
 import static one.nio.http.Response.BAD_REQUEST;
@@ -34,6 +35,15 @@ public class MyAsyncService extends HttpServer implements Service {
     @NotNull
     private final Executor executor;
 
+    private static final Logger logger = Logger.getLogger(MyAsyncService.class.getName());
+
+    /**
+     * Simple Async HTTP server.
+     *
+     * @param port - to accept HTTP connections
+     * @param dao - storage interface
+     * @param executor - an object that executes submitted tasks
+     */
     public MyAsyncService(final int port, @NotNull final DAO dao, @NotNull final Executor executor) throws IOException {
         super(from(port));
         this.dao = dao;
@@ -70,16 +80,15 @@ public class MyAsyncService extends HttpServer implements Service {
      * Access to DAO.
      *
      * @param request - requests: GET, PUT, DELETE
-     * @param session -
+     * @param session - HttpSession
      */
     private void entity(@NotNull final Request request, final HttpSession session) throws IOException {
         final String id = request.getParameter("id=");
         if (id == null || id.isEmpty()) {
-            final Response response = new Response(Response.BAD_REQUEST, Response.EMPTY);
             try {
-                session.sendResponse(response);
+                session.sendResponse(new Response(Response.BAD_REQUEST, Response.EMPTY));
             } catch (IOException e) {
-                throw new UncheckedIOException(e);
+                logger.log(INFO, "something has gone terribly wrong", e);
             }
             return;
         }
@@ -89,13 +98,13 @@ public class MyAsyncService extends HttpServer implements Service {
             switch (request.getMethod()) {
                 case Request.METHOD_GET:
                     executeAsync(session, () -> get(key));
-                    return;
+                    break;
                 case Request.METHOD_PUT:
                     executeAsync(session, () -> put(key, request));
-                    return;
+                    break;
                 case Request.METHOD_DELETE:
                     executeAsync(session, () -> delete(key));
-                    return;
+                    break;
                 default:
                     session.sendError(METHOD_NOT_ALLOWED, "Wrong method");
             }
@@ -127,7 +136,7 @@ public class MyAsyncService extends HttpServer implements Service {
                 try {
                     session.sendError(INTERNAL_ERROR, e.getMessage());
                 } catch (IOException ex) {
-                    throw new UncheckedIOException(e);
+                    logger.log(INFO, "something has gone terribly wrong", e);
                 }
             }
         });
