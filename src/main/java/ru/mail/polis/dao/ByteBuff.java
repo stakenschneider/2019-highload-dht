@@ -18,7 +18,7 @@ final class ByteBuff {
         return arr;
     }
 
-    static byte[] convertSub(@ NotNull final ByteBuffer byteBuffer) {
+    static byte[] convertSub(@NotNull final ByteBuffer byteBuffer) {
             final var arr = array(byteBuffer);
             for (int i = 0; i < arr.length; i++) {
                 arr[i] -= MIN_VALUE;
