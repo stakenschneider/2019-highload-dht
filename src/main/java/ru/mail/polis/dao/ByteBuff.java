@@ -9,7 +9,8 @@ import static java.lang.Byte.MIN_VALUE;
 
 final class ByteBuff {
 
-    private ByteBuff(){}
+    private ByteBuff() {
+    }
 
     static byte[] array(@NotNull final ByteBuffer buffer) {
         final var copy = buffer.duplicate();
@@ -19,15 +20,15 @@ final class ByteBuff {
     }
 
     static byte[] convertSub(@NotNull final ByteBuffer byteBuffer) {
-            final var arr = array(byteBuffer);
-            for (int i = 0; i < arr.length; i++) {
-                arr[i] -= MIN_VALUE;
-            }
-            return arr;
+        final var arr = array(byteBuffer);
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] -= MIN_VALUE;
+        }
+        return arr;
     }
 
     static ByteBuffer convertAdd(@NotNull final byte[] array) {
-        final var clone = Arrays.copyOf(array,array.length);
+        final var clone = Arrays.copyOf(array, array.length);
         for (int i = 0; i < array.length; i++) {
             clone[i] += MIN_VALUE;
         }
