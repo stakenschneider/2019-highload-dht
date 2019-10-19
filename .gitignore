@@ -18,6 +18,7 @@
 !.codeclimate.yml
 !wrk_results.md
 !wrk2_results.md
+!total.md
 !*.svg
 
 
