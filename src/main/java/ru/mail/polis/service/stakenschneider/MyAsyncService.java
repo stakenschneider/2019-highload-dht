@@ -204,7 +204,7 @@ public class MyAsyncService extends HttpServer implements Service {
         try {
             return clusterClients.get(cluster).invoke(request);
         } catch (InterruptedException | PoolException | HttpException e) {
-            throw new IOException(e.getMessage());
+            throw new IOException("fail", e);
         }
     }
 
