@@ -9,6 +9,9 @@ import one.nio.http.HttpSession;
 import one.nio.http.Request;
 import one.nio.http.HttpException;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+
 import one.nio.http.Path;
 import one.nio.net.ConnectionString;
 import one.nio.net.Socket;
@@ -17,10 +20,6 @@ import one.nio.server.AcceptorConfig;
 import ru.mail.polis.Record;
 import ru.mail.polis.dao.DAO;
 import ru.mail.polis.service.Service;
-
-
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 import java.io.IOException;
 
@@ -70,7 +69,7 @@ public class MyAsyncService extends HttpServer implements Service {
         config.acceptors = new AcceptorConfig[]{acceptor};
         config.maxWorkers = Runtime.getRuntime().availableProcessors();
         config.queueTime = 10;
-        Map<String, HttpClient> clusterClients = new HashMap<>();
+        final Map<String, HttpClient> clusterClients = new HashMap<>();
         for (final String it : nodes.getNodes()) {
             if (!nodes.getId().equals(it) && !clusterClients.containsKey(it)) {
                 clusterClients.put(it, new HttpClient(new ConnectionString(it + "?timeout=100")));
@@ -205,7 +204,7 @@ public class MyAsyncService extends HttpServer implements Service {
         try {
             return clusterClients.get(cluster).invoke(request);
         } catch (InterruptedException | PoolException | HttpException e) {
-            throw new IOException("fail");
+            throw new IOException(e.getMessage());
         }
     }
 
