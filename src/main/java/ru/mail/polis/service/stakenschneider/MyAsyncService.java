@@ -1,15 +1,23 @@
 package ru.mail.polis.service.stakenschneider;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
-import one.nio.http.*;
+import one.nio.http.HttpServer;
+import one.nio.http.Response;
+import one.nio.http.HttpServerConfig;
+import one.nio.http.HttpClient;
+import one.nio.http.HttpSession;
+import one.nio.http.Request;
+import one.nio.http.HttpException;
+
+import one.nio.http.Path;
 import one.nio.net.ConnectionString;
+import one.nio.net.Socket;
 import one.nio.pool.PoolException;
+import one.nio.server.AcceptorConfig;
 import ru.mail.polis.Record;
 import ru.mail.polis.dao.DAO;
 import ru.mail.polis.service.Service;
 
-import one.nio.net.Socket;
-import one.nio.server.AcceptorConfig;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -26,7 +34,6 @@ import java.util.concurrent.Executor;
 import org.jetbrains.annotations.NotNull;
 
 import static java.util.logging.Level.INFO;
-
 
 public class MyAsyncService extends HttpServer implements Service {
     @NotNull
@@ -52,6 +59,9 @@ public class MyAsyncService extends HttpServer implements Service {
         this.clusterClients = clusterClients;
     }
 
+    /**
+     * Create Async HTTP server.
+     */
      public static Service create(final int port, @NotNull final DAO dao,
                                  @NotNull final Nodes nodes) throws IOException {
         final var acceptor = new AcceptorConfig();
@@ -195,7 +205,7 @@ public class MyAsyncService extends HttpServer implements Service {
         try {
             return clusterClients.get(cluster).invoke(request);
         } catch (InterruptedException | PoolException | HttpException e) {
-            throw new IOException("Forwarding failed for..." + e.getMessage());
+            throw new IOException("fail");
         }
     }
 
