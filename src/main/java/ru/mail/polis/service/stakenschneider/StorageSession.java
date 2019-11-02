@@ -44,7 +44,6 @@ final class StorageSession extends HttpSession {
     @Override
     protected void processWrite() throws Exception {
         super.processWrite();
-
         next();
     }
 

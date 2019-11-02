@@ -32,6 +32,7 @@ import java.util.concurrent.Executor;
 
 import org.jetbrains.annotations.NotNull;
 
+import static java.util.logging.Level.WARNING;
 import static java.util.logging.Level.INFO;
 
 public class MyAsyncService extends HttpServer implements Service {
@@ -105,7 +106,7 @@ public class MyAsyncService extends HttpServer implements Service {
             try {
                 session.sendResponse(new Response(Response.BAD_REQUEST, Response.EMPTY));
             } catch (IOException e) {
-                logger.log(INFO, "something has gone terribly wrong", e);
+                logger.log(WARNING, "something has gone terribly wrong");
             }
             return;
         }

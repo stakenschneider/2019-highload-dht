@@ -23,7 +23,7 @@ public class RockRecIter implements Iterator<Record>, AutoCloseable {
     @Override
     public Record next() throws IllegalStateException {
         if (!hasNext()) {
-            throw new IllegalStateException("");
+            throw new IllegalStateException("out of range");
         }
 
         final var key = ByteBuff.convertAdd(iterator.key());
